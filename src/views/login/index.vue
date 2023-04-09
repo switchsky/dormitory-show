@@ -2,9 +2,9 @@
 <template>
   <div class="logincontainer">
     <el-form
+      ref="loginForm"
       class="loginform"
       :model="addModel"
-      ref="loginForm"
       :rules="rules"
       :inline="false"
       size="medium"
@@ -16,26 +16,36 @@
         <el-input
           v-model="addModel.username"
           placeholder="请输入账户"
-        ></el-input>
+        />
       </el-form-item>
       <el-form-item prop="password">
         <el-input
           v-model="addModel.password"
           placeholder="请输入密码"
-        ></el-input>
+        />
       </el-form-item>
+      <el-form-item prop="captcha">
+        <el-input
+          v-model="addModel.captcha"
+          placeholder="请输入验证码"
+        />
+      </el-form-item>
+
       <el-form-item prop="userType">
         <el-radio-group v-model="addModel.userType">
           <el-radio :label="0">学生</el-radio>
           <el-radio :label="1">管理员</el-radio>
         </el-radio-group>
+        <img class="verifyCodeImg" :src="imgUrl" @click="resetImg()" @onload="generate()">
       </el-form-item>
       <el-form-item>
         <el-row :gutter="20">
           <el-col :span="12" :offset="0">
-            <el-button class="loginbtn" type="primary" @click="onSubmit"
-              >登录</el-button
-            >
+            <el-button
+              class="loginbtn"
+              type="primary"
+              @click="onSubmit"
+            >登录</el-button>
           </el-col>
           <el-col :span="12" :offset="0">
             <el-button class="loginbtn">取消</el-button>
@@ -47,58 +57,89 @@
 </template>
 
 <script>
+import {
+  getPic
+} from '@/api/user'
+
 export default {
   data() {
     return {
-      //表单数据
+      // 表单数据
       addModel: {
-        username: "",
-        password: "",
-        userType: "",
+        username: '',
+        password: '',
+        captcha: '',
+        userType: ''
       },
-      //表单验证规则
+      imgUrl: '',
+      // 表单验证规则
       rules: {
         username: [
           {
-            trigger: "change",
+            trigger: 'change',
             required: true,
-            message: "请输入账户",
-          },
+            message: '请输入账户'
+          }
         ],
         password: [
           {
-            trigger: "change",
+            trigger: 'change',
             required: true,
-            message: "请输入密码",
-          },
+            message: '请输入密码'
+          }
         ],
         userType: [
           {
-            trigger: "change",
+            trigger: 'change',
             required: true,
-            message: "请选择用户类型",
-          },
+            message: '请选择用户类型'
+          }
         ],
-      },
-    };
+        captcha: [
+          {
+            trigger: 'change',
+            required: true,
+            message: '请输入验证码'
+          }
+        ]
+      }
+    }
+  },
+  mounted() {
+    this.generate()
   },
   methods: {
     onSubmit() {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.$store.dispatch('user/login', this.addModel).then(() => {
-            //登录成功
+            // 登录成功
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
           })
         }
-      });
+      })
     },
-  },
-};
+    async resetImg() {
+      const res = await getPic()
+      if (res && res.code == 200) {
+        this.imgUrl = 'data:image/png;base64,' + res.data
+      }
+    },
+    async generate() {
+      const res = await getPic()
+      if (res && res.code == 200) {
+        this.imgUrl = 'data:image/png;base64,' + res.data
+      }
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
+.verifyCodeImg {
+  margin-left: 100px;
+}
 .logincontainer {
   height: 100%;
   background: #fff;
@@ -108,7 +149,7 @@ export default {
   justify-content: center;
   background-size: 100% 100%;
   .loginform {
-    height: 350px;
+    height: 400px;
     width: 450px;
     background: #fff;
     padding: 35px 20px;
