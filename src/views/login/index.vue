@@ -31,12 +31,20 @@
         />
       </el-form-item>
 
+      <el-form-item prop="token">
+        <el-input
+          v-model="addModel.token"
+          style="display:none"
+          placeholder=""
+        />
+      </el-form-item>
+
       <el-form-item prop="userType">
         <el-radio-group v-model="addModel.userType">
           <el-radio :label="0">学生</el-radio>
           <el-radio :label="1">管理员</el-radio>
         </el-radio-group>
-        <img class="verifyCodeImg" :src="imgUrl" @click="resetImg()" @onload="generate()">
+        <img class="verifyCodeImg" alt="无法显示图片" :src="imgUrl" @click="resetImg()" @onload="generate()">
       </el-form-item>
       <el-form-item>
         <el-row :gutter="20">
@@ -69,6 +77,7 @@ export default {
         username: '',
         password: '',
         captcha: '',
+        token: '',
         userType: ''
       },
       imgUrl: '',
@@ -101,7 +110,8 @@ export default {
             required: true,
             message: '请输入验证码'
           }
-        ]
+        ],
+        token: []
       }
     }
   },
@@ -123,13 +133,15 @@ export default {
     async resetImg() {
       const res = await getPic()
       if (res && res.code == 200) {
-        this.imgUrl = 'data:image/png;base64,' + res.data
+        this.imgUrl = 'data:image/png;base64,' + res.data.img
+        this.addModel.token = res.data.token
       }
     },
     async generate() {
       const res = await getPic()
       if (res && res.code == 200) {
-        this.imgUrl = 'data:image/png;base64,' + res.data
+        this.imgUrl = 'data:image/png;base64,' + res.data.img
+        this.addModel.token = res.data.token
       }
     }
   }
@@ -139,6 +151,7 @@ export default {
 <style lang="scss" scoped>
 .verifyCodeImg {
   margin-left: 100px;
+  cursor: pointer;
 }
 .logincontainer {
   height: 100%;
@@ -149,7 +162,7 @@ export default {
   justify-content: center;
   background-size: 100% 100%;
   .loginform {
-    height: 400px;
+    height: 430px;
     width: 450px;
     background: #fff;
     padding: 35px 20px;

@@ -1,5 +1,5 @@
-import { login, logout, getInfo,loginApi } from '@/api/user'
-import { getToken, setToken, removeToken,setUserId ,setUserType,getUserId,getUserType,clearSession} from '@/utils/auth'
+import { login, logout, getInfo, loginApi } from '@/api/user'
+import { getToken, setToken, removeToken, setUserId, setUserType, getUserId, getUserType, clearSession } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
 const getDefaultState = () => {
@@ -34,19 +34,19 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    const { username, password ,userType} = userInfo
+    const { username, password, userType, captcha, token } = userInfo
     return new Promise((resolve, reject) => {
-      loginApi({ username: username.trim(), password: password ,userType:userType}).then(response => {
+      loginApi({ username: username.trim(), password: password, userType: userType, captcha: captcha, token: token }).then(response => {
         const { data } = response
         console.log(data)
         // commit('SET_TOKEN', data.token)
-        //采用的是mock的数据，目的是进入首页
+        // 采用的是mock的数据，目的是进入首页
         // commit('SET_TOKEN', 'admin-token')
         commit('SET_TOKEN', data.token)
         setToken(data.token)
-        //设置用户id
+        // 设置用户id
         setUserId(data.userId)
-        //设置用户类型
+        // 设置用户类型
         setUserType(data.userType)
         resolve()
       }).catch(error => {
@@ -58,7 +58,7 @@ const actions = {
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo({userId:getUserId(),userType:getUserType()}).then(response => {
+      getInfo({ userId: getUserId(), userType: getUserType() }).then(response => {
         const { data } = response
         console.log('获取用户信息')
         console.log(response)
@@ -84,13 +84,13 @@ const actions = {
   },
 
   // user logout
-  logout({ commit, state,dispatch }) {
+  logout({ commit, state, dispatch }) {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
         removeToken() // must remove  token  first
         resetRouter()
         commit('RESET_STATE')
-        //清空tagsview里面的数据
+        // 清空tagsview里面的数据
         dispatch('tagsView/delAllViews', {}, { root: true })
         clearSession()
         resolve()
