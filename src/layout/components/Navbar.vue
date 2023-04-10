@@ -19,9 +19,9 @@
           <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
             <el-dropdown-item>Github</el-dropdown-item>
           </a> -->
-          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
-            <el-dropdown-item>文档</el-dropdown-item>
-          </a>
+          <el-dropdown-item divided @click.native="userinfo">
+            <span style="display:block;">个人信息</span>
+          </el-dropdown-item>
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">退出登录</span>
           </el-dropdown-item>
@@ -54,6 +54,9 @@ export default {
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    },
+    userinfo() {
+      this.$router.push('/userinfo')
     }
   }
 }
@@ -68,7 +71,7 @@ export default {
   // box-shadow: 0 1px 4px rgba(0,21,41,.08);
 
   .hamburger-container {
-    
+
     line-height: 46px;
     height: 100%;
     float: left;
