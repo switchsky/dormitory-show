@@ -68,7 +68,6 @@
 import {
   getPic
 } from '@/api/user'
-
 export default {
   data() {
     return {

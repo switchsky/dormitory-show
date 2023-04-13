@@ -94,7 +94,8 @@
                 </el-form-item>
               </el-form>
               <div slot="footer" class="dialog-footer">
-                <el-button size="mini" type="primary">提交</el-button>
+                <el-button size="mini" type="primary" @click="search">查询信息</el-button>
+                <el-button size="mini" type="primary" @click="submit">提交</el-button>
                 <el-button size="mini" type="warning" @click="backToSys">返回系统</el-button>
               </div>
             </div>
@@ -107,23 +108,42 @@
 </template>
 
 <script>
+import { getUserInfoDetail, updateUserDetail } from '@/api/user.js'
+import { getUserType, getUserId } from '@/utils/auth.js'
 export default {
   data() {
     return {
       dataForm: {
+        userId: getUserId(),
+        userType: getUserType(),
         img: '',
-        username: 'switchsky',
-        nickName: '小呆呆',
-        phone: '173567777777',
-        sex: '0',
-        age: '15',
-        email: 'm13305711717@163.com',
-        hobby: '游泳，打球',
-        signature: '好好奋斗，奉献青春'
+        username: '',
+        nickName: '',
+        phone: '',
+        sex: '',
+        age: '',
+        email: '',
+        hobby: '',
+        signature: ''
+      },
+      userInfo: {
+        userId: getUserId(),
+        userType: getUserType()
       }
     }
   },
+  mounted() {
+    this.getUserInfo()
+  },
   methods: {
+    async getUserInfo() {
+      const res = await getUserInfoDetail(this.userInfo)
+      if (res && res.code == 200) {
+        this.dataForm = res.data
+      } else {
+        this.$message.error(res.msg)
+      }
+    },
     getBase64(file) {
       return new Promise(function(resolve, reject) {
         const reader = new FileReader()
@@ -159,12 +179,32 @@ export default {
           // 这里拿到base64的文件流，处理你自己的业务逻辑
         })
       }
-      // console.log(this.dataForm.img)
     },
     // 实现图片上传功能
     httpRequest(item) {
     },
+    async search() {
+      const res = await getUserInfoDetail(this.userInfo)
+      if (res && res.code == 200) {
+        this.dataForm = res.data
+        this.$message.success('查询成功')
+      } else {
+        this.$message.error(res.msg)
+      }
+    },
+    async submit() {
+      this.dataForm.userId = this.userInfo.userId
+      this.dataForm.userType = this.userInfo.userType
+      const res = await updateUserDetail(this.dataForm)
+      if (res && res.code == 200) {
+        this.$message.success('更新成功')
+        this.getUserInfo()
+      } else {
+        this.$message.error(res.msg)
+      }
+    },
     backToSys() {
+      this.$destroy()
       this.$router.push('/')
     }
   }

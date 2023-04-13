@@ -65,3 +65,12 @@ export const getTotalApi = async() => {
 export const getPic = async() => {
   return await http.get('/api/login/verifyCode', null)
 }
+// 获取用户个人信息
+export const getUserInfoDetail = async(param) => {
+  return await http.get('/api/user/getUserInfo', param)
+}
+
+// 修改用户信息
+export const updateUserDetail = async(param) => {
+  return await http.put('/api/user/updatePerson', param)
+}
