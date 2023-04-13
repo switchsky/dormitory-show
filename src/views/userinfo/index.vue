@@ -115,7 +115,6 @@ export default {
         username: 'switchsky',
         nickName: '小呆呆',
         phone: '173567777777',
-        homeUrl: 'http://www.baidu.com',
         sex: '0',
         age: '15',
         email: 'm13305711717@163.com',
