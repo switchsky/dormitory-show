@@ -74,3 +74,8 @@ export const getUserInfoDetail = async(param) => {
 export const updateUserDetail = async(param) => {
   return await http.put('/api/user/updatePerson', param)
 }
+
+//
+export const changePassword = async(param) => {
+  return await http.put('/api/user/changePassword', param)
+}

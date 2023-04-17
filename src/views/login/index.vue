@@ -22,6 +22,7 @@
         <el-input
           v-model="addModel.password"
           placeholder="请输入密码"
+          show-password
         />
       </el-form-item>
       <el-form-item prop="captcha">
@@ -94,6 +95,18 @@ export default {
             trigger: 'change',
             required: true,
             message: '请输入密码'
+          },
+          {
+            type: 'string',
+            message: '请输入不包含空格的字符',
+            trigger: 'blur',
+            transform(value) {
+              if (value && value.indexOf(' ') === -1) {
+                return value
+              } else {
+                return false
+              }
+            }
           }
         ],
         userType: [
@@ -171,7 +184,7 @@ export default {
       align-items: center;
       justify-content: center;
       font-size: 24px;
-      color: #409eff;
+      color: #35b65e;
       font-weight: 600;
       margin-bottom: 10px;
     }
