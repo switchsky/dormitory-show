@@ -36,7 +36,7 @@
     <!-- echarts -->
     <div style="display: flex">
       <!-- 为 ECharts 准备一个定义了高宽的 DOM 容器 -->
-      <div id="main" style="width: 800px; height: 300px; flex-grow: 1"></div>
+      <div id="main" style="width: 800px; height: 300px; flex-grow: 1" />
     </div>
     <el-card class="box-card" style="margin-top: 30px">
       <div slot="header" class="clearfix">
@@ -52,16 +52,16 @@
         <span style="margin-left: 30px; font-size: 14px">{{
           item.createTime
         }}</span>
-        <el-divider></el-divider>
+        <el-divider />
       </div>
     </el-card>
   </el-main>
 </template>
 
 <script>
-import { getTopListApi } from "@/api/notice.js";
-import { getTotalApi } from "@/api/user.js";
-import { getTotalBuildApi } from "@/api/build.js";
+import { getTopListApi } from '@/api/notice.js'
+import { getTotalApi } from '@/api/user.js'
+import { getTotalBuildApi } from '@/api/build.js'
 export default {
   data() {
     return {
@@ -69,71 +69,70 @@ export default {
       buildCount: 0,
       classCount: 0,
       repairCount: 0,
-      stuCount: 0,
-    };
+      stuCount: 0
+    }
   },
   mounted() {
-    this.getTotal();
-    this.getTopList();
-    this.myecharts1();
+    this.getTotal()
+    this.getTopList()
+    this.myecharts1()
   },
   methods: {
-    //获取公告列表
+    // 获取公告列表
     async getTotal() {
-      let res = await getTotalApi();
+      const res = await getTotalApi()
       if (res && res.code == 200) {
-        console.log(res);
-        this.classCount = res.data.classCount;
-        this.buildCount = res.data.buildCount;
-        this.repairCount = res.data.repairCount;
-        this.stuCount = res.data.stuCount;
+        console.log(res)
+        this.classCount = res.data.classCount
+        this.buildCount = res.data.buildCount
+        this.repairCount = res.data.repairCount
+        this.stuCount = res.data.stuCount
       }
     },
-    //获取公告列表
+    // 获取公告列表
     async getTopList() {
-      let res = await getTopListApi();
+      const res = await getTopListApi()
       if (res && res.code == 200) {
-        this.noticeList = res.data;
-        console.log(this.noticeList);
+        this.noticeList = res.data
+        console.log(this.noticeList)
       }
     },
     async myecharts1() {
-      //初始化echarts
-      var myChart = this.$echarts.init(document.getElementById("main"));
+      // 初始化echarts
+      var myChart = this.$echarts.init(document.getElementById('main'))
       // 指定图表的配置项和数据
       var option = {
         title: {
-          text: "学生统计",
+          text: '学生统计'
         },
         tooltip: {},
         legend: {
-          data: ["分类"],
+          data: ['分类']
         },
         xAxis: {
-          data: [],
+          data: []
         },
         yAxis: {},
         series: [
           {
-            name: "销量",
-            type: "bar",
-            data: [],
-          },
-        ],
-      };
-      //动态获取数据
-      let res = await getTotalBuildApi();
+            name: '人数',
+            type: 'bar',
+            data: []
+          }
+        ]
+      }
+      // 动态获取数据
+      const res = await getTotalBuildApi()
       if (res && res.code == 200) {
-        option.xAxis.data = res.data.names;
-        option.series[0].data = res.data.counts;
+        option.xAxis.data = res.data.names
+        option.series[0].data = res.data.counts
       }
       // 使用刚指定的配置项和数据显示图表。
-      myChart.setOption(option);
-    },
-  },
-};
+      myChart.setOption(option)
+    }
+  }
+}
 </script>
-
 
 <style lang="scss" scoped>
 .bottom-text {

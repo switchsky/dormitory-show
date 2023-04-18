@@ -1,5 +1,5 @@
 import { login, logout, getInfo, loginApi } from '@/api/user'
-import { getToken, setToken, removeToken, setUserId, setUserType, getUserId, getUserType, clearSession } from '@/utils/auth'
+import { getToken, setToken, removeToken, setUserId, setUserType, setUserName, getUserId, getUserType, getUserName, clearSession } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
 const getDefaultState = () => {
@@ -48,6 +48,8 @@ const actions = {
         setUserId(data.userId)
         // 设置用户类型
         setUserType(data.userType)
+        // 设置用户名
+        setUserName(data.username)
         resolve()
       }).catch(error => {
         reject(error)
@@ -75,7 +77,7 @@ const actions = {
 
         commit('SET_ROLES', roles)
         commit('SET_NAME', name)
-        commit('SET_AVATAR', require('@/assets/images/login_bg.png'))
+        commit('SET_AVATAR', require('@/assets/images/head.jpg'))
         resolve(data)
       }).catch(error => {
         reject(error)

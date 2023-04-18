@@ -8,10 +8,10 @@
       <div class="right-menu">
         <el-dropdown class="avatar-container" trigger="click">
           <div class="avatar-wrapper">
-            <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
-            <i class="el-icon-caret-bottom" />
+            <span class="user-show">您好，{{ userInfo.userName }}<i class="el-icon-caret-bottom" /></span>
+            <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar"> -->
           </div>
-          <el-dropdown-menu slot="dropdown" class="user-dropdown">
+          <el-dropdown-menu slot="dropdown" class="this.$refs">
             <!-- <router-link to="/">
             <el-dropdown-item>
               Home
@@ -33,7 +33,7 @@
         </el-dropdown>
       </div>
       <!-- 修改密码界面 -->
-      <el-dialog title="修改密码" width="40%" :visible.sync="cgpwdVisible" :close-on-click-modal="false" :modal-append-to-body="false">
+      <el-dialog title="修改密码" width="40%" :visible.sync="cgpwdVisible" :close-on-click-modal="false" :modal-append-to-body="false" class="titlec">
         <el-form
           ref="dataForm"
           :model="dataForm"
@@ -65,7 +65,7 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-import { getUserType, getUserId } from '@/utils/auth.js'
+import { getUserType, getUserId, getUserName } from '@/utils/auth.js'
 import { changePassword } from '@/api/user.js'
 import { changeStuPassword } from '@/api/student.js'
 export default {
@@ -77,7 +77,8 @@ export default {
     return {
       userInfo: {
         userId: getUserId(),
-        userType: getUserType()
+        userType: getUserType(),
+        userName: getUserName()
       },
       size: 'small',
       cgpwdVisible: false, // 编辑界面是否显示
@@ -208,7 +209,7 @@ export default {
   height: 50px;
   overflow: hidden;
   position: relative;
-  background: #6c96cc;
+  background: #7ca7e3;
   // box-shadow: 0 1px 4px rgba(0,21,41,.08);
 
   .hamburger-container {
@@ -262,19 +263,26 @@ export default {
       .avatar-wrapper {
         margin-top: 5px;
         position: relative;
-
         .user-avatar {
           cursor: pointer;
           width: 40px;
           height: 40px;
           border-radius: 10px;
         }
-
+        .user-show {
+          display: block;
+          cursor:pointer;
+          color:#fff;
+          font-size: 14px;
+          font-weight: 500;
+          text-align: center;
+          margin-bottom: 10px;
+        }
         .el-icon-caret-bottom {
           cursor: pointer;
           position: absolute;
           right: -20px;
-          top: 25px;
+          top: 18px;
           font-size: 12px;
         }
       }

@@ -94,7 +94,7 @@
                 </el-form-item>
               </el-form>
               <div slot="footer" class="dialog-footer">
-                <el-button size="mini" type="primary" @click="search">查询信息</el-button>
+                <el-button v-loading.fullscreen.lock="fullscreenLoading" size="mini" type="primary" @click="search">查询信息</el-button>
                 <el-button size="mini" type="primary" @click="submit">提交</el-button>
                 <el-button size="mini" type="warning" @click="backToSys">返回系统</el-button>
               </div>
@@ -129,7 +129,8 @@ export default {
       userInfo: {
         userId: getUserId(),
         userType: getUserType()
-      }
+      },
+      fullscreenLoading: false
     }
   },
   mounted() {
@@ -137,6 +138,7 @@ export default {
   },
   methods: {
     async getUserInfo() {
+      this.fullscreenLoading = true
       const res = await getUserInfoDetail(this.userInfo)
       if (res && res.code == 200) {
         this.dataForm = res.data
@@ -184,6 +186,7 @@ export default {
     httpRequest(item) {
     },
     async search() {
+      this.fullscreenLoading = true
       const res = await getUserInfoDetail(this.userInfo)
       if (res && res.code == 200) {
         this.dataForm = res.data
@@ -191,6 +194,7 @@ export default {
       } else {
         this.$message.error(res.msg)
       }
+      this.fullscreenLoading = false
     },
     async submit() {
       this.dataForm.userId = this.userInfo.userId

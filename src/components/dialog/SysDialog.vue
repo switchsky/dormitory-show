@@ -4,14 +4,14 @@
     :visible.sync="visible"
     :width="width + 'px'"
     :before-close="onClose"
-    :close-on-click-modal='false'
+    :close-on-click-modal="false"
   >
     <div class="containner" :style="{ height: height + 'px' }">
-      <slot name="content"></slot>
+      <slot name="content" />
     </div>
     <span slot="footer" class="dialog-footer">
-      <el-button type="danger" @click="onClose">取 消</el-button>
-      <el-button type="primary" @click="onConfirm">确 定</el-button>
+      <el-button type="danger" size="small" icon="el-icon-close" @click="onClose">取 消</el-button>
+      <el-button type="primary" size="small" icon="el-icon-check" @click="onConfirm">确 定</el-button>
     </span>
   </el-dialog>
 </template>
@@ -20,37 +20,37 @@
 export default {
   props: {
     title: {
-      //弹框的标题
+      // 弹框的标题
       type: String,
-      default: "标题",
+      default: '标题'
     },
     visible: {
-      //控制弹框的展示和影藏
+      // 控制弹框的展示和影藏
       type: Boolean,
-      default: false,
+      default: false
     },
     width: {
-      //弹框宽度
+      // 弹框宽度
       type: Number,
-      default: 600,
+      default: 600
     },
     height: {
-      //弹框的高度
+      // 弹框的高度
       type: Number,
-      default: 250,
-    },
+      default: 250
+    }
   },
   methods: {
-    //弹框的关闭
+    // 弹框的关闭
     onClose() {
-      this.$emit("onClose");
+      this.$emit('onClose')
     },
-    //弹框的展示
+    // 弹框的展示
     onConfirm() {
-      this.$emit("onConfirm");
-    },
-  },
-};
+      this.$emit('onConfirm')
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -66,14 +66,17 @@ export default {
     .el-dialog__header {
       border-top-left-radius: 7px !important;
       border-top-right-radius: 7px !important;
-      background-color: #1890ff;
+      background-color: #fff;
+      margin-bottom: 20px;
       .el-dialog__title {
-        color: #fff;
-        font-size: 15px;
-        font-weight: 700;
+        font-size: 18px;
+        color: #303133;
+        font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+        padding-bottom: 4px;
+        border-bottom: 2px solid #7ca7e3;
       }
       .el-dialog__close {
-        color: #fff;
+        color: #909399;
       }
     }
     .el-dialog__body {
