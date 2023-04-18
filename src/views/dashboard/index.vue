@@ -29,10 +29,17 @@
       <el-col :span="6">
         <div class="show-header" style="background: rgb(255, 153, 0)">
           <div class="show-num">{{ buildCount }}</div>
-          <div class="bottom-text">楼宇总数</div>
+          <div class="bottom-text">楼栋总数</div>
         </div>
       </el-col>
     </el-row>
+
+    <!-- echarts -->
+    <div class="bing">
+      <!-- 为 ECharts 准备一个定义了高宽的 DOM 容器 -->
+      <div id="info1" style="width: 50%; height: 300px;" />
+      <div id="info2" style="width: 50%; height: 300px;" />
+    </div>
     <!-- echarts -->
     <div style="display: flex">
       <!-- 为 ECharts 准备一个定义了高宽的 DOM 容器 -->
@@ -62,6 +69,7 @@
 import { getTopListApi } from '@/api/notice.js'
 import { getTotalApi } from '@/api/user.js'
 import { getTotalBuildApi } from '@/api/build.js'
+import { getStuNumBySex, getStuNumByClass } from '@/api/student.js'
 export default {
   data() {
     return {
@@ -76,6 +84,8 @@ export default {
     this.getTotal()
     this.getTopList()
     this.myecharts1()
+    this.myecharts2()
+    this.myecharts3()
   },
   methods: {
     // 获取公告列表
@@ -103,7 +113,7 @@ export default {
       // 指定图表的配置项和数据
       var option = {
         title: {
-          text: '学生统计'
+          text: '学生住宿'
         },
         tooltip: {},
         legend: {
@@ -117,7 +127,11 @@ export default {
           {
             name: '人数',
             type: 'bar',
-            data: []
+            data: [],
+            showBackground: true,
+            backgroundStyle: {
+              color: 'rgba(220, 220, 220, 0.8)'
+            }
           }
         ]
       }
@@ -129,12 +143,83 @@ export default {
       }
       // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option)
+    },
+    async myecharts2() {
+      var myChart = this.$echarts.init(document.getElementById('info1'))
+      var option = {
+        title: {
+          text: '学生来源'
+        },
+        series: [
+          {
+            type: 'pie',
+            data: [],
+            radius: ['40%', '70%'],
+            label: {
+              normal: {
+                show: true,
+                formatter: '{b}: {c}人' // 自定义显示格式(b:name, c:value, d:百分比)
+              }
+            }
+          }
+        ]
+      }
+
+      // 动态获取数据
+      const res = await getStuNumByClass()
+      if (res && res.code === 200) {
+        option.series[0].data = res.data
+        // option.series[0].data = res.data.counts
+      }
+      // 使用刚指定的配置项和数据显示图表。
+      myChart.setOption(option)
+    },
+    async myecharts3() {
+      var myChart = this.$echarts.init(document.getElementById('info2'))
+      var option = {
+        title: {
+          text: '男女比例'
+        },
+        series: [
+          {
+            type: 'pie',
+            data: [
+              {
+                value: 0,
+                name: '男'
+              },
+              {
+                value: 0,
+                name: '女'
+              }
+            ],
+            label: {
+              normal: {
+                show: true,
+                formatter: '{b}: {c}人 ({d}%)' // 自定义显示格式(b:name, c:value, d:百分比)
+              }
+            }
+          }
+        ]
+      }
+      // 动态获取数据
+      const res = await getStuNumBySex()
+      if (res && res.code === 200) {
+        option.series[0].data[0].value = res.data.man
+        option.series[0].data[1].value = res.data.woman
+      }
+      // 使用刚指定的配置项和数据显示图表。
+      myChart.setOption(option)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.bing {
+  display: flex;
+  justify-content: flex-start;
+}
 .bottom-text {
   bottom: 0;
   width: 100%;

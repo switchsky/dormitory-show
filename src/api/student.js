@@ -40,3 +40,13 @@ export const resetPasswordApi = async(parm) => {
 export const changeStuPassword = async(parm) => {
   return await http.put('/api/student/changeStuPassword', parm)
 }
+
+// 查询学生男女人数
+export const getStuNumBySex = async() => {
+  return await http.get('/api/student/getStuNumBySex')
+}
+
+// 查询班级学生人数
+export const getStuNumByClass = async() => {
+  return await http.get('/api/student/getStuNumByClass')
+}

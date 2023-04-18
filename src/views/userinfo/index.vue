@@ -138,7 +138,6 @@ export default {
   },
   methods: {
     async getUserInfo() {
-      this.fullscreenLoading = true
       const res = await getUserInfoDetail(this.userInfo)
       if (res && res.code == 200) {
         this.dataForm = res.data
