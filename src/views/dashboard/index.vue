@@ -9,27 +9,28 @@
       style="margin-bottom: 80px"
     >
       <el-col :span="6">
-        <div class="show-header" style="background: rgb(45, 183, 245)">
+        <div class="show-header" style="background: rgb(236, 112, 99)">
+          <div class="bottom-text">学生总数 <i class="el-icon-user-solid" /></div>
           <div class="show-num">{{ stuCount }}</div>
-          <div class="bottom-text">学生总数</div>
         </div>
       </el-col>
       <el-col :span="6">
-        <div class="show-header" style="background: rgb(237, 64, 20)">
+        <div class="show-header" style="background: rgb(93, 173, 226)">
           <div class="show-num">{{ classCount }}</div>
-          <div class="bottom-text">班级总数</div>
+          <div class="bottom-text">班级总数 <i class="el-icon-school" /></div>
         </div>
       </el-col>
       <el-col :span="6">
-        <div class="show-header">
+        <div class="show-header" style="background: rgb(82, 190, 128)">
           <div class="show-num">{{ repairCount }}</div>
-          <div class="bottom-text">待维修数</div>
+          <div class="bottom-text">待维修数 <i class="el-icon-s-tools" /></div>
         </div>
       </el-col>
       <el-col :span="6">
-        <div class="show-header" style="background: rgb(255, 153, 0)">
-          <div class="show-num">{{ buildCount }}</div>
-          <div class="bottom-text">楼栋总数</div>
+        <div class="show-header" style="background: rgb(244, 208, 63)">
+          <div class="show-num">{{ buildCount }}
+          </div>
+          <div class="bottom-text">楼栋总数 <i class="el-icon-office-building" /></div>
         </div>
       </el-col>
     </el-row>
@@ -45,23 +46,26 @@
       <!-- 为 ECharts 准备一个定义了高宽的 DOM 容器 -->
       <div id="main" style="width: 800px; height: 300px; flex-grow: 1" />
     </div>
-    <el-card class="box-card" style="margin-top: 30px">
-      <div slot="header" class="clearfix">
-        <span style="color: #000000; font-weight: 600">公告列表</span>
-      </div>
-      <div v-for="(item, index) in noticeList" :key="index" class="text item">
-        <span style="font-weight: 600; font-size: 14px">{{
-          item.noticeTitle
-        }}</span>
-        <span style="margin-left: 30px; font-size: 14px">{{
-          item.noticeText
-        }}</span>
-        <span style="margin-left: 30px; font-size: 14px">{{
-          item.createTime
-        }}</span>
-        <el-divider />
-      </div>
-    </el-card>
+    <div class="noticetitle">
+      <span>公告详情</span>
+    </div>
+
+    <div class="container">
+      <!-- 第一个卡片 -->
+      <el-card v-for="(item, index) in noticeList" :key="index" class="card" shadow="hover">
+        <div class="content">
+          <h3>{{
+            item.noticeTitle
+          }}</h3>
+          <p>{{
+            item.noticeText
+          }}</p>
+          <div class="time">{{
+            item.createTime
+          }}</div>
+        </div>
+      </el-card>
+    </div>
   </el-main>
 </template>
 
@@ -221,25 +225,89 @@ export default {
   justify-content: flex-start;
 }
 .bottom-text {
-  bottom: 0;
+  padding-left: 5%;
+  padding-top: 3%;
+  top: 0;
   width: 100%;
-  background: rgba(0, 0, 0, 0.1);
   height: 25px;
   line-height: 25px;
-  text-align: center;
+  text-align: left;
   position: absolute;
-  font-weight: 600;
+  font-weight: 500;
+  font-size: 20px;
 }
 .show-header {
   background: #00c0ef;
   color: #fff;
-  height: 80px;
-  border-radius: 5px;
+  height: 100px;
+  border-radius: 15px;
   position: relative;
 }
 .show-num {
-  font-size: 38px;
+  font-size: 70px;
   font-weight: 600;
-  padding: 5px;
+  padding-top: 35px;
+  padding-right: 10%;
+  text-align: right;
+  line-height: 25px;
+}
+.noticetitle {
+  padding-left: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #464646;
+}
+.container{
+    position: relative;
+    display: flex; /* flex容器（flex container） */
+    justify-content: center;/* 定义项目在主轴上的对齐方式 */
+    align-items: center;/* 定义项目在竖直方向上对齐方式 */
+    max-width: 1200px;
+    flex-wrap: wrap;/* 定义项目是否换行以及如何换行  */
+    z-index: 1;
+}
+.container .card{
+    position: relative;
+    width: 280px;
+    height: 400px;
+    margin: 30px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.container .card .content{
+    padding: 20px;
+    text-align: center;
+    /* transform: translateY(100px); */
+    /* opacity: 0; */
+    /* transition: 0.5s; */
+}
+/* .container .card:hover .content{
+    transform: translateY(0px);
+    opacity: 1;
+} */
+.container .card .content h3{
+    font-size: 1.8em;
+    color: #000;
+    z-index: 1;
+}
+.container .card .content p{
+    font-size: 1em;
+    color: #000;
+    font-weight: 300;
+}
+.container .card .content .time{
+    position: relative;
+    display: inline-block;
+    padding: 8px 20px;
+    margin-top: 15px;
+    background: #fff;
+    color: #000;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 13px;
 }
 </style>
