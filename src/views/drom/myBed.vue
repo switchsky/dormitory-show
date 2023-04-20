@@ -1,18 +1,18 @@
 <template>
   <el-main>
     <el-table :data="tableList" border stripe>
-      <el-table-column prop="stuName" label="姓名"></el-table-column>
-      <el-table-column prop="className" label="班级"></el-table-column>
-      <el-table-column prop="buildName" label="栋数"></el-table-column>
-      <el-table-column prop="storeyName" label="层数"></el-table-column>
-      <el-table-column prop="roomCode" label="宿舍"></el-table-column>
-      <el-table-column prop="bedCode" label="床位"></el-table-column>
+      <el-table-column prop="stuName" label="姓名" />
+      <el-table-column prop="className" label="班级" />
+      <el-table-column prop="buildName" label="栋数" />
+      <el-table-column prop="storeyName" label="层数" />
+      <el-table-column prop="roomCode" label="宿舍" />
+      <el-table-column prop="bedCode" label="床位" />
       <el-table-column prop="bedCode" label="床位">
         <template slot-scope="scope">
-          <span class="room-type" v-if="scope.row.rootType == '1'">1人间</span>
-          <span class="room-type" v-if="scope.row.rootType == '2'">2人间</span>
-          <span class="room-type" v-if="scope.row.rootType == '4'">4人间</span>
-          <span class="room-type" v-if="scope.row.rootType == '6'">6人间</span>
+          <span v-if="scope.row.rootType == '1'" class="room-type">1人间</span>
+          <span v-if="scope.row.rootType == '2'" class="room-type">2人间</span>
+          <span v-if="scope.row.rootType == '4'" class="room-type">4人间</span>
+          <span v-if="scope.row.rootType == '6'" class="room-type">6人间</span>
         </template>
       </el-table-column>
       <el-table-column prop="bedCode" label="操作" align="center" width="150">
@@ -22,8 +22,7 @@
             type="primary"
             size="small"
             @click="applyBtn(scope.row)"
-            >调换宿舍</el-button
-          >
+          >与他人调换</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -49,45 +48,45 @@
           filter-placeholder="请输入姓名"
           @left-check-change="leftChange"
           @change="btnChange"
-        ></el-transfer>
+        />
       </div>
     </sys-dialog>
   </el-main>
 </template>
 
 <script>
-import SysDialog from "@/components/dialog/SysDialog.vue";
-import { getStuBedListApi, getStuListApi, applySaveApi } from "@/api/mybed.js";
-import { getUserId,getUserType } from "@/utils/auth.js";
+import SysDialog from '@/components/dialog/SysDialog.vue'
+import { getStuBedListApi, getStuListApi, applySaveApi } from '@/api/mybed.js'
+import { getUserId, getUserType } from '@/utils/auth.js'
 export default {
   components: {
-    SysDialog,
+    SysDialog
   },
   data() {
     return {
       value: [],
-      //弹框的属性
+      // 弹框的属性
       dialog: {
-        title: "",
+        title: '',
         height: 320,
         width: 620,
-        visible: false,
+        visible: false
       },
       tableList: [],
-      stuList: [],
-    };
+      stuList: []
+    }
   },
   created() {
-    this.getStuBedList();
+    this.getStuBedList()
   },
   methods: {
     btnChange(select, index) {
-      let item = this.value;
+      const item = this.value
       if (item.length > 0) {
         for (let i = 0; i < item.length; i++) {
           for (let j = 0; j < select.length; j++) {
             if (item[i] != select[j]) {
-              item.splice(i, 1);
+              item.splice(i, 1)
             }
           }
         }
@@ -98,57 +97,57 @@ export default {
         for (let i = 0; i < item.length; i++) {
           for (let j = 0; j < index.length; j++) {
             if (item[i] != index[j]) {
-              item.splice(i, 1);
+              item.splice(i, 1)
             }
           }
         }
       }
     },
     filterMethod(query, item) {
-      return item.stuName.indexOf(query) > -1;
+      return item.stuName.indexOf(query) > -1
     },
     async onConfirm() {
-      console.log(this.value);
-      let res = await applySaveApi({
+      console.log(this.value)
+      const res = await applySaveApi({
         applyId: getUserId(),
-        changeId: this.value[0],
-      });
+        changeId: this.value[0]
+      })
       if (res && res.code == 200) {
-        this.$message.success(res.msg);
-        this.dialog.visible = false;
+        this.$message.success(res.msg)
+        this.dialog.visible = false
       }
     },
     onClose() {
-      this.dialog.visible = false;
+      this.dialog.visible = false
     },
     applyBtn(row) {
       this.value = []
-      //查询学生信息
-      this.getStuList();
-      this.dialog.title = "申请调换";
-      this.dialog.visible = true;
+      // 查询学生信息
+      this.getStuList()
+      this.dialog.title = '申请调换'
+      this.dialog.visible = true
     },
-    //查询调换的学生信息
+    // 查询调换的学生信息
     async getStuList() {
-      let res = await getStuListApi({
-        stuId: getUserId(),
-      });
+      const res = await getStuListApi({
+        stuId: getUserId()
+      })
       if (res && res.code == 200) {
-        this.stuList = res.data;
-        console.log(this.stuList);
+        this.stuList = res.data
+        console.log(this.stuList)
       }
     },
     async getStuBedList() {
-      let res = await getStuBedListApi({
+      const res = await getStuBedListApi({
         stuId: getUserId(),
-        userType:getUserType()
-      });
+        userType: getUserType()
+      })
       if (res && res.code == 200) {
-        this.tableList = res.data;
+        this.tableList = res.data
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
