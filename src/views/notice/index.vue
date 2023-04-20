@@ -198,7 +198,7 @@ export default {
           }
           if (res && res.code == 200) {
             if (res.msg.trim() == 'sensitive') {
-              this.$alert('<p>标题和内容含有以下敏感词：</p>' + '<p>标题：' + res.data.title + '</p>' + '<p>内容：' + res.data.passage + '</p>', '含有敏感词,请重新编辑', {
+              this.$alert('<p>标题和内容含有以下敏感词：</p>' + '<p><strong>标题：</strong>' + res.data.title + '</p>' + '<p><strong>内容：</strong>' + res.data.passage + '</p>', '含有敏感词,请重新编辑', {
                 confirmButtonText: '确定',
                 dangerouslyUseHTMLString: true
               })
