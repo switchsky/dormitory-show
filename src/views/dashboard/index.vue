@@ -46,6 +46,11 @@
       <!-- 为 ECharts 准备一个定义了高宽的 DOM 容器 -->
       <div id="main" style="width: 800px; height: 300px; flex-grow: 1" />
     </div>
+    <!-- echarts -->
+    <div style="display: flex">
+      <!-- 为 ECharts 准备一个定义了高宽的 DOM 容器 -->
+      <div id="main2" style="width: 800px; height: 300px; flex-grow: 1" />
+    </div>
     <div class="noticetitle">
       <span>公告详情</span>
     </div>
@@ -74,6 +79,8 @@ import { getTopListApi } from '@/api/notice.js'
 import { getTotalApi } from '@/api/user.js'
 import { getTotalBuildApi } from '@/api/build.js'
 import { getStuNumBySex, getStuNumByClass } from '@/api/student.js'
+import { getLeaveNumApi } from '@/api/leave.js'
+
 export default {
   data() {
     return {
@@ -81,7 +88,8 @@ export default {
       buildCount: 0,
       classCount: 0,
       repairCount: 0,
-      stuCount: 0
+      stuCount: 0,
+      date: []
     }
   },
   mounted() {
@@ -90,6 +98,7 @@ export default {
     this.myecharts1()
     this.myecharts2()
     this.myecharts3()
+    this.myecharts4()
   },
   methods: {
     // 获取公告列表
@@ -213,6 +222,65 @@ export default {
         option.series[0].data[1].value = res.data.woman
       }
       // 使用刚指定的配置项和数据显示图表。
+      myChart.setOption(option)
+    },
+    async myecharts4() {
+      var myChart = this.$echarts.init(document.getElementById('main2'))
+      var leaveNum = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      // 生成日期
+      const date = new Date()
+      const year = date.getFullYear() // 获取完整的年份(4位)
+      let month = date.getMonth() + 1 // 获取当前月份(0-11,0代表1月)
+      let strDate = date.getDate() // 获取当前日(1-31)
+      if (month < 10) month = `0${month}` // 如果月份是个位数，在前面补0
+      if (strDate < 10) strDate = `0${strDate}` // 如果日是个位数，在前面补0
+      var list = []
+      for (let i = 10; i >= 1; i--) {
+        const s = `${strDate - i}日`
+        list.push(s)
+      }
+      var option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: { type: 'cross' }
+        },
+        title: {
+          text: '缺勤情况（近10天）'
+        },
+        xAxis: {
+          type: 'category',
+          data: list,
+          axisTick: {
+            alignWithLabel: true
+          }
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            data: leaveNum,
+            type: 'line',
+            smooth: true,
+            label: {
+              show: true,
+              position: 'top',
+              textStyle: {
+                fontSize: 10
+              }
+            }
+          }
+        ]
+      }
+
+      // 动态获取数据
+      const res = await getLeaveNumApi()
+      if (res && res.code == 200) {
+        const leaveData = res.data
+        for (var i = 0; i <= 9; i++) {
+          if (leaveData[i]) { leaveNum[leaveData[i].time] = leaveData[i].num }
+        }
+      }
       myChart.setOption(option)
     }
   }
